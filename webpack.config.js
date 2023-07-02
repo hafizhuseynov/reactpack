@@ -1,8 +1,7 @@
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { merge: mergeWebpackConfigs } = require("webpack-merge");
+
 const getCommonWebpackConfig = require("./config/webpack/webpack.common");
-const getDevelopmentWebpackConfig = require("./config/webpack/webpack.dev");
-const getProductionWebpackConfig = require("./config/webpack/webpack.prod");
 const { availableEnvironments } = require("./config/constant");
 
 module.exports = function (env = {}) {

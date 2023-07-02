@@ -3,6 +3,7 @@
 const path = require("path");
 const paths = require("../paths");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 // style files regexes
@@ -13,18 +14,18 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 const shouldUseReactRefresh = true;
 
-const hasJsxRuntime = (() => {
-  if (process.env.DISABLE_NEW_JSX_TRANSFORM === "true") {
-    return false;
-  }
+// const hasJsxRuntime = (() => {
+//   if (process.env.DISABLE_NEW_JSX_TRANSFORM === "true") {
+//     return false;
+//   }
 
-  try {
-    require.resolve("react/jsx-runtime");
-    return true;
-  } catch (e) {
-    return false;
-  }
-})();
+//   try {
+//     require.resolve("react/jsx-runtime");
+//     return true;
+//   } catch (e) {
+//     return false;
+//   }
+// })();
 
 module.exports = function getCommonWebpackConfig(args) {
   return {
@@ -72,6 +73,21 @@ module.exports = function getCommonWebpackConfig(args) {
     plugins: [
       new HtmlWebpackPlugin({
         template: "./public/index.html",
+      }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            context: paths.appPublic,
+            from: "*",
+            to: paths.appBuild,
+            toType: "dir",
+            globOptions: {
+              dot: true,
+              gitignore: true,
+              ignore: ["**/index.html"],
+            },
+          },
+        ],
       }),
     ],
   };
