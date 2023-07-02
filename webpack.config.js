@@ -1,5 +1,11 @@
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { merge: mergeWebpackConfigs } = require("webpack-merge");
+const webpack = require("webpack");
+const fs = require("fs");
+
+if (fs.existsSync(".env")) {
+  require("dotenv").config({ path: "./.env" });
+}
 
 const getCommonWebpackConfig = require("./config/webpack/webpack.common");
 const { availableEnvironments } = require("./config/constant");
@@ -33,6 +39,12 @@ module.exports = function (env = {}) {
       })
     );
   }
+
+  webpackConfiguration.plugins.push(
+    new webpack.DefinePlugin({
+      "process.env": JSON.stringify(process.env),
+    })
+  );
 
   return mergeWebpackConfigs(commonWebpackConfig, webpackConfiguration);
 };
