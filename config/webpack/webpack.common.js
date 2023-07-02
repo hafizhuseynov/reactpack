@@ -26,57 +26,53 @@ const hasJsxRuntime = (() => {
   }
 })();
 
-module.exports = {
-  entry: "./src/index.js",
-  output: {
-    filename: "bundle.js",
-    path: paths.appBuild,
-    clean: true,
-    assetModuleFilename: "static/media/[name].[hash][ext]",
-    publicPath: paths.publicUrlOrPath,
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(js|mjs|jsx|ts|tsx)$/,
-        include: paths.appSrc,
-        loader: require.resolve("babel-loader"),
-        options: {
-          //   customize: require.resolve(
-          //     "babel-preset-react-app/webpack-overrides"
-          //   ),
-          presets: [
-            [
-              require.resolve("babel-preset-react-app"),
-              {
-                runtime: hasJsxRuntime ? "automatic" : "classic",
-              },
-            ],
-          ],
-
-          plugins: [
-            isEnvDevelopment &&
-              shouldUseReactRefresh &&
-              require.resolve("react-refresh/babel"),
-          ].filter(Boolean),
-          // This is a feature of `babel-loader` for webpack (not Babel itself).
-          // It enables caching results in ./node_modules/.cache/babel-loader/
-          // directory for faster rebuilds.
-          cacheDirectory: true,
-          // See #6846 for context on why cacheCompression is disabled
-          cacheCompression: false,
-          compact: isEnvProduction,
+module.exports = function getCommonWebpackConfig(args) {
+  return {
+    entry: "./src/index.js",
+    output: {
+      filename: "bundle.js",
+      path: paths.appBuild,
+      clean: true,
+      assetModuleFilename: "static/media/[name].[hash][ext]",
+      publicPath: paths.publicUrlOrPath,
+    },
+    module: {
+      rules: [
+        {
+          test: /\.(j|t)s(x?)$/,
+          exclude: [/node_modules/, /(.|_)min\.js$/],
+          loader: "babel-loader",
+          options: {
+            cacheDirectory: true,
+          },
         },
-      },
-      {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader"],
-      },
+        {
+          test: /\.(png|jpg|jpeg|gif)$/i,
+          type: "asset/resource",
+        },
+        {
+          test: /\.svg$/i,
+          type: "asset",
+          resourceQuery: /url/, // *.svg?url
+        },
+        {
+          test: /\.svg$/i,
+          issuer: /\.[jt]sx?$/,
+          resourceQuery: { not: [/url/] }, // exclude react component if *.svg?url
+          use: ["@svgr/webpack"],
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/i,
+          // it's technically possible to use font files for icons (like Font Awesome)
+          exclude: paths.appIcons,
+          type: "asset/resource",
+        },
+      ],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: "./public/index.html",
+      }),
     ],
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "./public/index.html",
-    }),
-  ],
+  };
 };
