@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import Text from "./components/Text";
+import Text from "components/Text";
 function App() {
   return (
     <React.StrictMode>

@@ -19,6 +19,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "import/no-named-as-default": 0
+    // "import/no-unresolved": "off"
   },
   "parserOptions": {
     "ecmaVersion": 2020,
@@ -31,6 +32,11 @@
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+      "webpack": {
+        "config": "./config/webpack/webpack.common.js"
+      }
     }
   }
 }

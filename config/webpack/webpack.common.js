@@ -1,7 +1,7 @@
 "use strict";
 
-const path = require("path");
 const paths = require("../paths");
+const modules = require("../modules");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -14,19 +14,6 @@ const sassModuleRegex = /\.module\.(scss|sass)$/;
 
 const shouldUseReactRefresh = true;
 
-// const hasJsxRuntime = (() => {
-//   if (process.env.DISABLE_NEW_JSX_TRANSFORM === "true") {
-//     return false;
-//   }
-
-//   try {
-//     require.resolve("react/jsx-runtime");
-//     return true;
-//   } catch (e) {
-//     return false;
-//   }
-// })();
-
 module.exports = function getCommonWebpackConfig(args) {
   return {
     entry: "./src/index.js",
@@ -36,6 +23,11 @@ module.exports = function getCommonWebpackConfig(args) {
       clean: true,
       assetModuleFilename: "static/media/[name].[hash][ext]",
       publicPath: paths.publicUrlOrPath,
+    },
+    resolve: {
+      alias: {
+        ...(modules.webpackAliases || {}),
+      },
     },
     module: {
       rules: [

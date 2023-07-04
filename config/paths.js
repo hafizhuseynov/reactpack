@@ -62,4 +62,5 @@ module.exports = {
   appIcons: resolveApp("src/assets/icons"),
   publicUrlOrPath,
   moduleFileExtensions,
+  resolveApp,
 };
