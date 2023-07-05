@@ -1,3 +1,5 @@
+'use strict'
+
 const path = require("path");
 const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const paths = require("../paths.js");

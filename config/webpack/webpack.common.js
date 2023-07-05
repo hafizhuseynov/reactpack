@@ -4,15 +4,6 @@ const paths = require("../paths");
 const modules = require("../modules");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
-// style files regexes
-const cssRegex = /\.css$/;
-const cssModuleRegex = /\.module\.css$/;
-const sassRegex = /\.(scss|sass)$/;
-const sassModuleRegex = /\.module\.(scss|sass)$/;
-
-const shouldUseReactRefresh = true;
 
 module.exports = function getCommonWebpackConfig(args) {
   return {
@@ -46,7 +37,7 @@ module.exports = function getCommonWebpackConfig(args) {
         {
           test: /\.svg$/i,
           type: "asset",
-          resourceQuery: /url/, // *.svg?url
+          resourceQuery: /url/, // Return svg url -> useage: *.svg?url
         },
         {
           test: /\.svg$/i,
